@@ -60,11 +60,11 @@ app.inject('/it')
 
 ## Loading JSON resources from disk
 
-Proving a path pattern to `opts.loadPath` will allow you load JSON locale files
+Providing a path pattern to `opts.loadPath` will allow you load JSON locale files
 from disk. The path must include `{{ns}}` and `{{lng}}` patterns so that the
 namespace and language of the resource can be determined.
 
-For example given the following structure:
+For example, given the following structure:
 
 ```
 └ locales/
@@ -77,8 +77,8 @@ For example given the following structure:
 ```
 
 The path `./locales/{{lng}}/{{ns}}.json` will load the `messages.json` and
-`greetings.json` files to the messages and greetings namespaces for English and
-Italian.
+`greetings.json` files in the `en` and `it` directories, and add them to the
+messages and greetings namespaces for English and Italian.
 
 Eg:
 
@@ -171,13 +171,15 @@ app.t('messages:helloAll', 'en', { names: ['Niall', 'James', 'Tim'] })
 
 ## Detecting the language for the request
 
-Setting the `languageDetectors` option will add a hook to set the language from
-any or all of the follwing, a URL path parameter, query string, cookie, session
-or accept header. The detectors will be exector in array order and stop as
-soon as a supported language is found.
+Setting the `languageDetectors` option will add a hook to detect the language
+from any or all of the following: a URL path parameter, query string, cookie,
+session or [accept header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language).
+The detectors will run in the order they appear in the `languageDetectors`
+array and stop as soon as a supported language is found.
 
 When using either the session or cookie detectors, the detected language will
-be persisted in the session or cookie.
+be persisted to the session or cookie, even if it was detected by a different
+detector, eg: the query string detector.
 
 ```javascript
 import fastify from 'fastify'
@@ -206,7 +208,7 @@ app.inject({
 })
   .then(res => console.log(res.payload))
 
-// 'cy', detected from lng query, cookie won't be checked as it is lower
+// 'cy', detected from lng query, the cookie won't be checked as it is lower
 // priority
 app.inject({
   path: '/',
@@ -218,16 +220,16 @@ app.inject({
 
 ## Plugin options
 
-* `fallbackLng` (String): The default language code to use. Default: the first language it the `languages` array.
-* `languages` (Array): List of language codes to support, trying to change to a lanuage not in the list will set to the fallback language.
+* `fallbackLng` (String): The default language code to use. Default: the first language in the `languages` array.
+* `languages` (Array): List of language codes to support, trying to change to a language not in the list will instead set the fallback language.
 * `resources` (Object): Object map of locale messages, in the format `{ lang: { namespace: { key: message } } }`.
 * `loadPath` (String): Path to load JSON file resources from, namespace and language are determined from path parameters, eg: `./locales/{{lng}}/{{ns}}.json`.
-* `languageDetectors` (Array): A list of language selectors to use, will be checked in order until a supported language is detected. Can be one to many of the following:
-  * `"query"`: Detect language from query string. Default query: 'lng'.
+* `languageDetectors` (Array): A list of language detectors to use, will be run in the supplied order until a supported language is detected. Can be one to many of the following:
+  * `"query"`: Detect language from query string.
   * `"param"`: Detect language from parsed URL path parameter (eg: request.params.lng).
-  * `"accept"`: Detect language from [language accept header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language). Note: the [@fastify/accepts](https://github.com/fastify/fastify-accepts) plugin must be loaded to use this detector.
+  * `"accept"`: Detect language from the [language accept header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language). Note: the [@fastify/accepts](https://github.com/fastify/fastify-accepts) plugin must be loaded to use this detector.
   * `"cookie"`: Detect language from cookie value (will also persist any detected language to this cookie). Note: the [@fastify/cookie](https://github.com/fastify/fastify-cookie) plugin must be loaded to use this detector.
-  * `"session"`: Detect language from sesion value (will also persist any detected language to this sesion property). Note: the [@fastify/session](https://github.com/fastify/session) plugin must be loaded to use this detector.
+  * `"session"`: Detect language from session value (will also persist any detected language to this sesion property). Note: the [@fastify/session](https://github.com/fastify/session) plugin must be loaded to use this detector.
 * `queryKey` (String): The query value to use for the `query` language detector. Default: `lng`.
 * `param` (String): The path paramter to use for the `param` language detector. Default: `lng`.
 * `sessionKey` (String): The session property to use for the `session` language detector. Default: `lng`.
