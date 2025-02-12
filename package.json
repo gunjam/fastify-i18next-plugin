@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "A simple i18next plugin for fastify",
   "main": "index.js",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "test": "node --test",
     "coverage": "c8 node --test",
