@@ -1,6 +1,6 @@
 # fastify-i18next-plugin
 
-[![Coverage Status](https://coveralls.io/repos/github/gunjam/fastify-i18next-plugin/badge.svg?branch=main)](https://coveralls.io/github/gunjam/fastify-health-info?branch=main) [![neostandard javascript style](https://img.shields.io/badge/neo-standard-7fffff?style=flat\&labelColor=ff80ff)](https://github.com/neostandard/neostandard)
+[![Coverage Status](https://coveralls.io/repos/github/gunjam/fastify-i18next-plugin/badge.svg?branch=main)](https://coveralls.io/github/gunjam/fastify-i18next-plugin?branch=main) [![neostandard javascript style](https://img.shields.io/badge/neo-standard-7fffff?style=flat\&labelColor=ff80ff)](https://github.com/neostandard/neostandard)
 
 A simple plugin for using [i18next](https://www.i18next.com/) with [fastify](https://fastify.dev/).
 
