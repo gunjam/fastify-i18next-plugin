@@ -216,7 +216,7 @@ app.inject({
   .then(res => console.log(res.payload))
 ```
 
-# Plugin options
+## Plugin options
 
 * `fallbackLng` (String): The default language code to use. Default: the first language it the `languages` array.
 * `languages` (Array): List of language codes to support, trying to change to a lanuage not in the list will set to the fallback language.
@@ -235,7 +235,7 @@ app.inject({
 * `cookieOpts` (Object): The cookie options to use when setting the language cookie. See the [@fastify/cookie](https://github.com/fastify/fastify-cookie) options for more details. Default: `{ path: '/', sameSite: true, httpOnly: true }`
 * `decorateLocals` (Boolean): Decorate reply.locals with language properties and `t()` for use in templates, for example when using [@fastify/view](https://github.com/fastify/point-of-view).
 
-# Server decorators
+## Server decorators
 
 ```javascript
 app.t('namespace:key') // Get a message for the fallback language
@@ -246,7 +246,7 @@ app.addI18nResource('lang', 'namespace', { key: 'Message' }) // Add new locales 
 app.loadI18nResources('./locales/{{lng}}.{{ns}}.json') // Load JSON locales files from a path pattern
 ```
 
-# Request decorators
+## Request decorators
 
 ```javascript
 app.get('/', (request, reply) => {
@@ -259,7 +259,7 @@ app.get('/', (request, reply) => {
 })
 ```
 
-# reply.locals properties (if `decorateLocals` is `true`)
+## reply.locals properties (if `decorateLocals` is `true`)
 
 ```javascript
 app.get('/', (request, reply) => {
