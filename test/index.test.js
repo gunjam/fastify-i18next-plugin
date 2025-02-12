@@ -1,10 +1,11 @@
-const { equal, rejects, deepEqual, ok } = require('node:assert/strict')
+const { deepEqual, equal, match, ok, rejects } = require('node:assert/strict')
 const { join } = require('node:path')
 const { test } = require('node:test')
 const fastify = require('fastify')
 const cookiePlugin = require('@fastify/cookie')
 const acceptsPlugin = require('@fastify/accepts')
 const sessionPlugin = require('@fastify/session')
+const split = require('split2')
 const plugin = require('../index.js')
 
 test('error if opts.loadPath is not a string', async () => {
@@ -306,6 +307,31 @@ test('load resources from disk with opts.loadPath and get translations (ns and l
   })
 
   equal(app.t('messages:goodbye', 'en'), 'Goodbye!')
+})
+
+test('load resources from disk with opts.loadPath, do not error on non-parsable files, but log', async () => {
+  const logLines = []
+  const app = fastify({
+    logger: {
+      stream: split((data) => {
+        logLines.push(JSON.parse(data))
+      })
+    }
+  })
+  await app.register(plugin, {
+    loadPath: join(__dirname, './fixtures/broken/{{lng}}.{{ns}}.json'),
+    languages: ['en', 'it']
+  })
+
+  equal(app.t('messages:hello', 'en'), 'hello') // The key, message not loaded
+  equal(app.t('messages:hello', 'it'), 'Ciao!')
+
+  // Log warning that file could not be loaded
+  const file = join(__dirname, './fixtures/broken/en.messages.json')
+  equal(logLines.length, 1)
+  equal(logLines[0].msg, `[fastify-i18next-plugin] failed to load resource ${file}`)
+  equal(logLines[0].level, 50) // warn log level
+  match(logLines[0].err.message, /Unexpected token 'N', "Not valid JSON\r?\n" is not valid JSON/)
 })
 
 test('load resources from disk use app.loadI18nResources()', async () => {

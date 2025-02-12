@@ -124,7 +124,7 @@ async function i18nextPlugin (app, opts) {
         const data = await readFile(file, { encoding: 'utf-8' })
         i18next.addResourceBundle(lng, ns, JSON.parse(data))
       } catch (err) {
-        app.log.error(err, `[fastify-i18next] failed to load resource ${file}`)
+        app.log.error(err, `[fastify-i18next-plugin] failed to load resource ${file}`)
       }
     }
   }
